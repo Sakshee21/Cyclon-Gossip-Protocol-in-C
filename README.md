@@ -1,1 +1,1 @@
-# Cyclon-Gossip-Protocol-in-C
+# Cyclon-Enhanced Gossip Protocol in C
