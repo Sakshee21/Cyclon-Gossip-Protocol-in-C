@@ -53,7 +53,7 @@ Well here there are a pre-defined set of 6 users which can be scaled up and down
 Upon execution, it can be clearly visualized how the **oldest descriptors get swapped** among the peers thereby changing the view of each peer. Gossip exchange happens with peers which weren’t initially in the view of a
 node. This shows that swapping of the descriptors happen successfully.
 
-In the middle of the simulation a **message** can be typed as well to see it get **communicated to all the peers** in their respective terminals demonstrating **efficient message forwarding** higlighting the efficiency of the **Cyclon enhanced gossip protocol.
+In the middle of the simulation a **message** can be typed as well to see it get **communicated to all the peers** in their respective terminals demonstrating **efficient message forwarding** higlighting the efficiency of the **Cyclon enhanced gossip protocol**.
 
 
 In each terminal:
