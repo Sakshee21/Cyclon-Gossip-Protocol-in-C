@@ -48,7 +48,7 @@ connectivity or robustness.
 
 ## More about the project
 
-Well here there a pre-defined set of 6 users which can be scaled up and down and according to the number of users that many number of terminals need to be opened in the system for simultaneous execution. The port number of each user is listed in the `users.txt` file and loopback ip that is `127.0.0.1` is used for the execution.
+Well here there are a pre-defined set of 6 users which can be scaled up and down and according to the number of users that many number of terminals need to be opened in the system for simultaneous execution. The port number of each user is listed in the `users.txt` file and loopback ip that is `127.0.0.1` is used for the execution.
 
 Upon execution, it can be clearly visualized how the **oldest descriptors get swapped** among the peers thereby changing the view of each peer. Gossip exchange happens with peers which weren’t initially in the view of a
 node. This shows that swapping of the descriptors happen successfully.
