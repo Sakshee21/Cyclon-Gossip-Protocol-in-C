@@ -10,10 +10,10 @@ A UDP-socket implementation and empirical comparison of traditional gossip vs. *
 - **Result:** Cyclon achieves high reachability at a fraction of the message overhead of naive gossip at scale
 
 ## Comparative Analysis
-![Redundant Messages vs Number of Nodes](./images/comparative_analysis.png)
+![Redundant Messages vs Number of Nodes](./images/comparative_analysis_cyclon.png)
 
 | Strategy | Redundancy Model | Behavior |
-|---|---|---|
+|---|---|---|s
 | Fixed fanout (2) | `R ≈ N` | Low redundancy, but poor reachability at scale that is random peer selection without seeding means some nodes never get reached |
 | Log(N) fanout | `R ≈ 0.73·N·log₂N` | High reachability, but redundancy grows superlinearly |
 | **Cyclon** | Bounded, structured | High reachability **and** low redundancy that us the structured partial-view exchange avoids the tradeoff above |
@@ -88,7 +88,7 @@ A plain-text message typed into any terminal mid-run propagates to all peers via
 
 ## Screenshots from the live 6-node run:
 
-| ![Cyclon cycle and descriptor swap](./images/cyclon_swap_log.jpg) | ![Gossip message propagation](./images/alice_log.jpg) |
+| ![Cyclon cycle and descriptor swap](./images/cyclon_swap_log.jpg) | ![Gossip message propagation](./images/alice_log.png) |
 
 ## Project Structure
 
