@@ -20,9 +20,28 @@ A UDP-socket implementation and empirical comparison of traditional gossip vs. *
 
 The `0.73` constant was obtained by fitting a linear regression model to simulated redundant-message counts as node count scaled from 10 to 200.
 
+## The Redundancy vs. Reachability Tradeoff (and why Cyclon fits)
+
+This is the core question the project set out to answer: **in a decentralized network, how do you make sure a message reaches every node without flooding the network with duplicates?**
+
+**Fixed low fanout (e.g. 2 peers per node):** Redundancy stays low that is roughly R ≈ N extra messages — but reachability suffers badly as the network grows. Since peer selection is random and unseeded, the same handful of nodes can keep getting picked while others are never reached at all. This gets worse as node count increases, because the odds of every node being hit by pure chance drop off fast.
+
+**High/log(N) fanout:** Reachability improves a lot that is nearly every node gets the message but redundancy balloons to R ≈ 0.73·N·log₂N, meaning the network is doing far more work than necessary. Each additional node makes this worse, since the fanout itself grows with network size on top of the node count growing.
+
+**Neither extreme is good enough at scale.** A small fanout wastes reachability; a large fanout wastes bandwidth. This is exactly the gap Cyclon is designed to close.
+
+**How Cyclon resolves it:** Instead of picking random peers fresh every cycle, each node keeps a small, structured, constantly-refreshed partial view of the network (via descriptor exchange with its oldest-known peer each cycle). This means:
+
+- Peer contacts stay diverse over time without needing a large fanout per message — reachability comes from the view *refreshing itself*, not from contacting more peers per cycle
+- Because the view is bounded and age-managed, no peer gets contacted excessively or neglected — avoiding both the "stuck with the same peers" problem of low fanout and the "contact everyone" waste of high fanout
+- The overlay self-organizes toward randomness over time, which is what actually drives high reachability, rather than brute-forcing it with fanout size
+
+
+In short: **Cyclon decouples reachability from message overhead**, which is the fundamental tradeoff traditional gossip can't escape. That's the main result this project set out to demonstrate, and the logs below show it happening in a live run.
+
 ## How Cyclon Works
 
-Each node maintains a small, fixed-size partial view of the network — a set of **descriptors** (peer ID, address, timestamp). Every gossip cycle:
+Each node maintains a small, fixed-size partial view of the network that is a set of **descriptors** (peer ID, address, timestamp). Every gossip cycle:
 
 1. The node picks the **oldest** descriptor in its view and initiates an exchange with that peer
 2. Both nodes swap a random subset of their descriptors, including a fresh descriptor of themselves
@@ -38,7 +57,7 @@ This produces continuous, self-organizing reconfiguration of the overlay network
 
 ## Why It Beats Naive Gossip
 
-Naive gossip forwards messages to a random subset of peers with no awareness of network state — to get good reachability you need a high fanout, and that directly means high redundancy (nodes seeing the same message repeatedly). Cyclon sidesteps this because peer selection isn't purely random per-message as it's driven by a **constantly refreshed, bounded view**, so message forwarding paths stay diverse without needing a large fanout. Age-based eviction means no peer gets stale or over-contacted.
+Naive gossip forwards messages to a random subset of peers with no awareness of network state in order to get good reachability you need a high fanout, and that directly means high redundancy (nodes seeing the same message repeatedly). Cyclon sidesteps this because peer selection isn't purely random per-message as it's driven by a **constantly refreshed, bounded view**, so message forwarding paths stay diverse without needing a large fanout. Age-based eviction means no peer gets stale or over-contacted.
 
 ## Proof of Execution
 
