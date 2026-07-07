@@ -10,7 +10,7 @@ A UDP-socket implementation and empirical comparison of traditional gossip vs. *
 - **Result:** Cyclon achieves high reachability at a fraction of the message overhead of naive gossip at scale
 
 ## Comparative Analysis
-
+![Redundant Messages vs Number of Nodes](./images/comparative_analysis.png)
 
 | Strategy | Redundancy Model | Behavior |
 |---|---|---|
@@ -85,6 +85,10 @@ Initial view contents:
 This confirms the core mechanism: nodes end up gossiping with peers that weren't in their original view, proving the descriptor-swapping and view-refresh logic works correctly across a live, distributed run — not just in theory.
 
 A plain-text message typed into any terminal mid-run propagates to all peers via the current views, with duplicate detection preventing re-forwarding. This is also visible in the logs.
+
+## Screenshots from the live 6-node run:
+
+| ![Cyclon cycle and descriptor swap](./images/cyclon_swap_log.jpg) | ![Gossip message propagation](./images/alice_log.jpg) |
 
 ## Project Structure
 
